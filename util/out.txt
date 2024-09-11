@@ -1,0 +1,570 @@
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\.env --------
+PORT=8080
+URI=`mongodb+srv://admin:admin@qb3cluster.sknm95g.mongodb.net/stocks?retryWrites=true&w=majority`
+TICKCOUNT=5000
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\.eslintrc --------
+{
+  "extends": ["airbnb-base", "prettier"],
+  "plugins": ["prettier"],
+  "env": {
+    "node": true,
+    "es6": true,
+    "jest": true
+  }
+}
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\.gitignore --------
+node_modules
+.DS_Store
+.vscode
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\.prettierrc --------
+{
+  "singleQuote": true
+}
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\package.json --------
+{
+  "name": "express-rest-api-template",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=production node ./src/bin/www",
+    "dev": "nodemon ./src/bin/www",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "helmet": "^3.23.3",
+    "http-errors": "^1.8.0",
+    "mongoose": "^8.6.0",
+    "morgan": "^1.10.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.12",
+    "supertest": "^3.4.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "*.test.js"
+    ]
+  }
+}
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\README.md --------
+![example workflow](https://github.com/rzgry/Express-REST-API-Template/actions/workflows/node.js.yml/badge.svg)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+
+# Express-REST-API-Template
+
+Simple express boilerplate based off of [express-generator](https://expressjs.com/en/starter/generator.html). Includes [eslint](https://eslint.org) and [prettier](https://prettier.io) for linting/code formatting, [nodemon](https://github.com/remy/nodemon) for automatic server restarting, and [Jest](https://jestjs.io) for testing.
+
+## Getting Started
+
+### Install dependencies
+
+```
+npm install
+```
+
+### Running in development
+
+```
+npm run dev
+```
+
+### Running in production
+
+```
+npm start
+```
+
+Runs on localhost:3000 by default but can be configured using the `PORT` environment variable.
+
+### Running tests
+
+```
+npm test
+
+# Watch repo
+npm run test:watch
+```
+
+### Linting
+```
+npm run lint
+
+# fix issues
+npm run lint:fix
+```
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\app.js --------
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
+const dotenv = require("dotenv");
+
+const Options = require("./models/option.js");
+const Users = require("./models/users.js");
+const { tickUpdateOptions, anotherUtilityFunction } = require("./util/util");
+
+const indexRoute = require('./routes/index');
+const apiRoute = require('./routes/api');
+const authRoute = require('./routes/auth');
+const stockActionRoute = require('./routes/stockAction');
+
+dotenv.config();
+
+const app = express();
+app.use(bodyParser.json());
+
+async function main() {
+  await mongoose.connect(process.env.URI);
+  console.log("Connected to db!");
+
+  const interval = setInterval(await tickUpdateOptions, process.env.TICKCOUNT);
+}
+
+main().catch((err) => console.log(err));
+
+app.use('/', indexRoute);
+
+app.use('/api', apiRoute);
+
+app.use('/auth', authRoute);
+
+app.use('/saction', stockActionRoute);
+
+app.get("/", (req, res) => {
+  res.send("Hello, world!");
+});
+
+module.exports = app;
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\bin\www --------
+#!/usr/bin/env node
+
+const http = require('http');
+const app = require('../app');
+
+// Normalize a port into a number, string, or false.
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+
+  if (Number.isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+// Get port from environment and store in Express.
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+// Create the HTTP server
+const server = http.createServer(app);
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(`${bind} requires elevated privileges`); // eslint-disable-line no-console
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(`${bind} is already in use`); // eslint-disable-line no-console
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+function onListening() {
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+  console.log(`Listening on ${bind}`); // eslint-disable-line no-console
+}
+
+// Listen on provided port, on all network interfaces.
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\middleware\asyncHandler.js --------
+// Needed to wrap async routes in express to handle errors properly
+// https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016
+const asyncMiddleware = fn => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+module.exports = asyncMiddleware;
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\middleware\errorHandler.js --------
+const createError = require('http-errors');
+
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (err, req, res, next) => {
+  // eslint-disable-next-line no-console
+  console.error(err);
+  // if the error is safe to expose to client
+  if (err.expose === true) {
+    res.status(err.status || 500).send(err);
+  } else {
+    res.status(500).send(createError.InternalServerError());
+  }
+};
+
+module.exports = errorHandler;
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\models\option.js --------
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+const optionSchema = new Schema({
+  name: String,
+  price: Number,
+  historicalPrices: [Number]
+});
+module.exports = mongoose.model('Options',optionSchema);
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\models\users.js --------
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+const userSchema = new Schema({
+  username: String,
+  password: String,
+  carrots: Map,
+  wallet: Number
+});
+module.exports = mongoose.model('Users',userSchema);
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\routes\api.js --------
+const express = require('express');
+
+const router = express.Router();
+
+const Options = require("../models/option.js");
+const Users = require("../models/users.js");
+
+router.get('/', async (req, res) => {
+  const options = await Options.find();
+  res.json({ message: 'Connected to Database', options: options });
+});
+
+router.post('/user', async (req, res) => {
+  const { username, password } = req.body;
+  const user = await Users.findOne({ username }).exec();
+  if (user) {
+    res.json(user);
+  } else {
+    res.json({ success: false, message: 'Invalid username or password' });
+  }
+});
+
+module.exports = router;
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\routes\auth.js --------
+const express = require('express');
+
+const router = express.Router();
+
+const Options = require("../models/option.js");
+const Users = require("../models/users.js");
+
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await Users.findOne({ username, password }).exec();
+    if (user) {
+      res.json({ success: true, message: 'Login successful' });
+    } else {
+      res.json({ success: false, message: 'Invalid username or password' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+router.post('/createUser', async (req, res) => {
+  const { username, password, carrots, wallet } = req.body;
+
+  try {
+    // Check if user already exists
+    const existingUser = await Users.findOne({ username }).exec();
+    if (existingUser) {
+      res.json({ success: false, message: 'User already exists' });
+    } else {
+      // Create new user
+      const newUser = new Users({ username, password, carrots, wallet });
+      await newUser.save();
+      res.json({ success: true, message: 'User created successfully' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+module.exports = router;
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\routes\index.js --------
+const express = require('express');
+
+const router = express.Router();
+
+// disregard favicon error
+router.get('/favicon.ico', (req, res) => res.status(204));
+
+router.get('/', (req, res) => {
+  res.send({ message: 'Hello world' });
+});
+
+module.exports = router;
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\routes\stockAction.js --------
+const express = require('express');
+
+const router = express.Router();
+
+const Options = require("../models/option.js");
+const Users = require("../models/users.js");
+
+router.post('/buy/:option', async (req, res) => {
+  const { username, amount } = req.body;
+  const { option } = req.params;
+
+  try {
+    console.log(username);
+    const user = await Users.findOne({ username }).exec();
+    if (!user) {
+      res
+        .status(404)
+        .json({ success: false, message: `User '${username}' not found` });
+      return;
+    }
+    console.log('user found: ' + user);
+
+    // Find the option by name
+    const optionToAdd = await Options.findOne({ name: option }).exec();
+    if (!optionToAdd) {
+      res
+        .status(404)
+        .json({ success: false, message: `Option '${option}' not found` });
+      return;
+    }
+    console.log(
+      'option found: ' + optionToAdd.name + ' - ' + optionToAdd.price,
+    );
+
+    let optionFound = false;
+    user.carrots.forEach((value, key) => {
+      console.log(value);
+      if (key == optionToAdd.name) {
+        user.carrots.set(key, value + amount);
+        optionFound = true;
+      }
+    });
+
+    if (!optionFound) {
+      user.carrots.set(optionToAdd.name, amount);
+    }
+
+    if (user.wallet >= optionToAdd.price) {
+      user.wallet = user.wallet - optionToAdd.price * amount;
+    } else {
+      res.status(404).json({ success: false, message: `Wallet Insufficient` });
+      return;
+    }
+
+    console.log('bef save:' + user);
+    // Save the updated user object
+    await user.save();
+
+    res.json({
+      success: true,
+      message: `Option '${option}' added to carrots`,
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+router.post('/sell/:option', async (req, res) => {
+  const { username, amount } = req.body;
+  const { option } = req.params;
+
+  try {
+    console.log(username);
+    const user = await Users.findOne({ username }).exec();
+    if (!user) {
+      res
+        .status(404)
+        .json({ success: false, message: `User '${username}' not found` });
+      return;
+    }
+    console.log('user found: ' + user);
+
+    // Find the option by name
+    const optionToSell = await Options.findOne({ name: option }).exec();
+    if (!optionToSell) {
+      res
+        .status(404)
+        .json({ success: false, message: `Option '${option}' not found` });
+      return;
+    }
+    console.log(
+      'option found: ' + optionToSell.name + ' ' + optionToSell.price,
+    );
+
+    let optionFound = false;
+    user.carrots.forEach((value, key) => {
+      console.log(value);
+      if (key == optionToSell.name) {
+        if (value < amount) {
+          res.status(400).json({
+            success: false,
+            message: `Not enough '${option}' to sell`,
+          });
+          optionFound = true; // Option was found but not enough to sell
+          return;
+        }
+        user.wallet += optionToSell.price;
+        user.carrots.set(key, value - amount);
+        optionFound = true;
+      }
+    });
+
+    if (!optionFound) {
+      res.status(400).json({
+        success: false,
+        message: `Option '${option}' not found in user's carrots`,
+      });
+      return;
+    }
+
+    console.log('bef save:' + user);
+    // Save the updated user object
+    await user.save();
+
+    // res.json({ success: true, message: `Option '${option}' sold from carrots`, user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+module.exports = router;
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\util\util.js --------
+// utils.js
+
+const Options = require("../models/option");
+
+async function tickUpdateOptions() {
+  try {
+    const optionsToUpdate = ["google", "microsoft", "amazon"];
+
+    for (const optionName of optionsToUpdate) {
+      const option = await Options.findOne({ name: optionName });
+
+      if (!option) {
+        console.log(`Option '${optionName}' not found`);
+        continue;
+      }
+
+      const changeAmount = Math.floor(Math.random() * 11) - 5;
+      option.price += changeAmount;
+
+      if (!option.historicalPrices) {
+        option.historicalPrices = [option.price];
+      } else {
+        option.historicalPrices.push(option.price);
+
+        const maxSize = 500;
+        if (option.historicalPrices.length > maxSize) {
+          option.historicalPrices.shift();
+        }
+      }
+      console.log(option.name + " + tick");
+      await option.save();
+
+      // console.log(`Option '${optionName}' updated: ${option.price}`);
+    }
+  } catch (error) {
+    console.log("Internal Server Error: " + error);
+  }
+}
+
+function anotherUtilityFunction() {
+  console.log("This is another utility function.");
+}
+
+module.exports = {
+  tickUpdateOptions,
+  anotherUtilityFunction,
+};
+
+-------- C:\Users\Sirki\Desktop\Code\stock_v2\server\src\__tests__\app.test.js --------
+const request = require('supertest');
+const app = require('../app');
+
+describe('app', () => {
+  it('should export the express app correctly', () => {
+    expect(app).toBeTruthy();
+  });
+
+  describe('GET /', () => {
+    it('should respond to the GET method with 200', async () => {
+      const response = await request(app).get('/');
+      expect(response.statusCode).toBe(200);
+    });
+  });
+
+  describe('GET /404', () => {
+    beforeEach(() => {
+      // Avoid polluting the test output with 404 error messages
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    it('should respond to the GET method with a 404 for a route that does not exist', async () => {
+      const response = await request(app).get('/404');
+      expect(response.statusCode).toBe(404);
+      expect(response.text).toBe('{"message":"Not Found"}');
+    });
+
+    it('should respond to the POST method with a 404 for a route that does not exist', async () => {
+      const response = await request(app).post('/404');
+      expect(response.statusCode).toBe(404);
+      expect(response.text).toBe('{"message":"Not Found"}');
+    });
+  });
+});
+

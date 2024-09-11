@@ -1,0 +1,25 @@
+{
+    "colorize.languages": [
+        "ts",
+        "config.ts",
+        "css",
+        "sass",
+        "scss",
+        "less",
+        "postcss",
+        "sss",
+        "stylus",
+        "xml",
+        "svg"
+    ],
+    "colorize.include": [
+        "**/tailwind.config.ts",
+        "**/*.config.ts",
+        "**/*.ts",
+        "**/*.css",
+        "**/*.scss",
+        "**/*.sass",
+        "**/*.less",
+        "**/*.styl"
+    ]
+}
