@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
+const cors = require('cors'); // Import cors
 const dotenv = require("dotenv");
 
 const Options = require("./models/option.js");
@@ -16,6 +17,7 @@ dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors()); // Enable CORS
 
 async function main() {
   await mongoose.connect(process.env.URI);
@@ -27,11 +29,8 @@ async function main() {
 main().catch((err) => console.log(err));
 
 app.use('/', indexRoute);
-
 app.use('/api', apiRoute);
-
 app.use('/auth', authRoute);
-
 app.use('/saction', stockActionRoute);
 
 app.get("/", (req, res) => {

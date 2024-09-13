@@ -3,7 +3,10 @@ import React, { useState, useEffect } from 'react';
 export default function TerminalInput() {
   const [inputValue, setInputValue] = useState('');
   const [isBarVisible, setIsBarVisible] = useState(true);
-  const [username, setUsername] = useState('defaultUser'); // Example username
+  const [username, setUsername] = useState('defaultUser');
+  const [caretVisibility, setCaretVisibility] = useState('transparent');
+  const [blinkingBarVisibility, setBlinkingBarVisibility] = useState('block');
+  const [caretMovement, setCaretMovement] = useState(0);
 
   // Toggle the visibility of the blinking bar (caret)
   useEffect(() => {
@@ -24,45 +27,76 @@ export default function TerminalInput() {
       e.preventDefault(); // Prevent the default action of form submission or new line in the input
       await handleSubmit();
     }
-  };
-
-  // Handle the data submission
-  const handleSubmit = async () => {
-    const payload = {
-      username: username,
-      data: inputValue,
-    };
-
-    try {
-      const response = await fetch('http://localhost:8080/endpoint', { // Replace '/endpoint' with your actual endpoint
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+    if (e.key === 'ArrowLeft') {
+      setCaretMovement(prevCaretMovement => {
+        if (prevCaretMovement != -inputValue.length) {
+            const newCaretMovement = prevCaretMovement - 1;
+            setCaretVisibility(newCaretMovement === 0 ? 'transparent' : 'white');
+            setBlinkingBarVisibility(newCaretMovement === 0 ? 'block' : 'none');
+            console.log('end left: ' + newCaretMovement);
+            return newCaretMovement;
+        } else {
+            return prevCaretMovement;
+        }
       });
-
-      if (response.ok) {
-        console.log('Request successful');
-        setInputValue(''); // Clear the input field on successful submission
-      } else {
-        console.error('Request failed with status', response.status);
-      }
-    } catch (error) {
-      console.error('Error making request:', error);
+    }
+    if (e.key === 'ArrowRight') {
+      setCaretMovement(prevCaretMovement => {
+        if (prevCaretMovement < 0) {
+            const newCaretMovement = prevCaretMovement + 1;
+            setCaretVisibility(newCaretMovement === 0 ? 'transparent' : 'white');
+            setBlinkingBarVisibility(newCaretMovement === 0 ? 'block' : 'none');
+            console.log('end right: ' + newCaretMovement);
+            return newCaretMovement;
+        } else {
+            return prevCaretMovement;
+        }
+      });
     }
   };
 
+  // Handle the data submission
+  // Handle the data submission
+  const handleSubmit = async () => {
+        const payload = {
+            username: username,
+            data: inputValue,
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/api/test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                console.log('Request successful');
+            } else {
+                console.error('Request failed with status', response.status);
+            }
+
+            setInputValue('');
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
+    };
+
+    
+
   return (
     <div className="basis-1/12">
-      <div className="flex flex-row items-center h-full w-full text-white font-extrabold text-3xl">
+      <div className="flex flex-row items-center h-full w-full text-white font-bold text-3xl">
         <span className="px-2 text-orange">test@RT-25-SW$~: </span>
         
         {/* Input wrapper to manage custom caret */}
-        <div className="flex-1 h-full bg-transparent flex items-center relative">
+        <div className="flex-1 h-full flex items-center relative">
           <input
             type="text"
-            className="absolute left-0 top-0 w-full h-full opacity-0 caret-transparent"
+            id='userInput'
+            className={`absolute left-0 top-0 w-full h-full bg-transparent focus:outline-none caret-${caretVisibility}`}
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
@@ -74,7 +108,7 @@ export default function TerminalInput() {
           
           {/* Custom blinking caret */}
           {isBarVisible && (
-            <span className="blinking-bar bg-white w-[10px] h-[36px]"></span>
+            <span id='blinkingBar' className="blinking-bar bg-white w-[10px] h-[36px]" style={{ display: blinkingBarVisibility }}></span>
           )}
         </div>
       </div>

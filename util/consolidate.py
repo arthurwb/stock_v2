@@ -35,7 +35,9 @@ def consolidate_files(root_dir, output_file, exclude_dirs=None, exclude_files=No
 
 if __name__ == "__main__":
     root_dir = input("Enter the root directory: ")
-    output_file = input("Enter the output file path (including the file name, e.g., consolidated_output.txt): ")
+    output_file = input("Enter the output file path (leave black for './util/out.txt'): ")
+    if output_file == "":
+        output_file = "./util/out.txt"
     
     # Example: Exclude .svg and .png files
     exclude_extensions = ['.svg', '.png']

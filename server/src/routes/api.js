@@ -10,6 +10,13 @@ router.get('/', async (req, res) => {
   res.json({ message: 'Connected to Database', options: options });
 });
 
+router.post('/test', async (req, res) => {
+  console.log('Request received');
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+  res.json({ message: 'Request received' }); // Ensure response is sent back
+});
+
 router.post('/user', async (req, res) => {
   const { username, password } = req.body;
   const user = await Users.findOne({ username }).exec();
