@@ -8,8 +8,9 @@ const config: Config = {
   ],
   theme: {
     colors: {
-      orange: "#f08f4f",
-      red: "#E05858FF",
+      orange: "#FF6600FF",
+      red: "#FF0000FF",
+      green: "#1AFF00FF",
       black: "#000000",
       white: "#FFFFFF",
       lightgrey: "#686868FF",

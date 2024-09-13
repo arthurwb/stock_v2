@@ -100,36 +100,6 @@ The recommended way to deploy the app is to use the [Vercel Platform](https://ve
 
 For more information, see [Next.js deployment documentation](https://nextjs.org/docs/deployment).
 
-## Tailwind CSS Configuration
-
-This project uses **Tailwind CSS** for styling. The configuration can be found in `tailwind.config.ts`, which includes custom colors and font settings:
-
-```ts
-const config = {
-  theme: {
-    colors: {
-      orange: "#f08f4f",
-      red: "#E05858FF",
-      black: "#000000",
-      white: "#FFFFFF",
-      lightgrey: "#686868FF",
-      grey: "#222222FF",
-      darkgrey: "#111111",
-      transparent: "#00000000",
-    },
-    fontFamily: {
-      mono: ['Courier New', 'monospace']
-    }
-  },
-  // Add your own paths here to configure which files Tailwind should scan for class names.
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-};
-```
-
 ## Ant Design Integration
 
 **Ant Design** has been integrated into the project, with custom theming applied via the `ConfigProvider` in `layout.tsx`. Below is an example of how a custom button hover effect is configured:
