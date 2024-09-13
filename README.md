@@ -1,7 +1,3 @@
-Here is an updated version of your `README.md` file that includes details about the client-side code structure and additional information for developers working with this Next.js project:
-
----
-
 # The Exchange - Client
 
 This is the client-side code of **The Exchange** project, built using [Next.js](https://nextjs.org/) and styled with Tailwind CSS and Ant Design.
