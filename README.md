@@ -157,7 +157,7 @@ import { Button } from 'antd';
 <Button type="primary">Click Me</Button>;
 ```
 
-# Stock Trading REST API
+# The Exchange - Server
 
 This project is a RESTful API for a stock trading simulation, built using Express.js and MongoDB. It allows users to manage stock options, perform trading actions, and handle user authentication. This boilerplate comes with common tools such as ESLint for linting, Prettier for code formatting, Jest for testing, and Nodemon for automatic server reloading during development.
 

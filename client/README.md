@@ -1,8 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# The Exchange - Client
 
-## Getting Started
+This is the client-side code of **The Exchange** project, built using [Next.js](https://nextjs.org/) and styled with Tailwind CSS and Ant Design.
 
-First, run the development server:
+## Project Structure
+
+The project is divided into two main directories at the root:
+
+- **client/** - The Next.js frontend.
+- **server/** - The backend (instructions for this can be found in the `server/README.md`).
+
+### Client Directory Structure
+
+```
+client/
+├── .eslintrc.json           # ESLint configuration, extending Next.js core web vitals
+├── .gitignore               # Ignore list for version control
+├── next-env.d.ts            # TypeScript definitions for Next.js
+├── next.config.mjs          # Next.js configuration
+├── package.json             # NPM scripts and dependencies
+├── postcss.config.mjs       # PostCSS configuration with Tailwind
+├── tailwind.config.ts       # Tailwind CSS configuration with custom colors and fonts
+├── tsconfig.json            # TypeScript configuration
+├── src/                     # Application source code
+│   ├── app/                 # Main application directory
+│   │   ├── globals.css      # Global CSS using Tailwind
+│   │   ├── layout.tsx       # Root layout component
+│   │   ├── page.tsx         # Home page component
+│   │   ├── pages/           # Additional pages: About, Account, Exchange, Option
+└── README.md                # Documentation (this file)
+```
+
+## Technologies Used
+
+- **Next.js** (v14) - A React framework for server-side rendering.
+- **React** (v18) - A JavaScript library for building user interfaces.
+- **TypeScript** - A strongly typed programming language built on JavaScript.
+- **Tailwind CSS** - A utility-first CSS framework for rapid UI development.
+- **Ant Design** (v5) - A React UI library for building user-friendly, feature-rich components.
+
+## Setup and Development
+
+### 1. Install Dependencies
+
+First, navigate to the `client/` directory and install all necessary dependencies by running:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+### 2. Start the Development Server
+
+Once the dependencies are installed, run the development server:
 
 ```bash
 npm run dev
@@ -10,27 +62,97 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The server will start at [http://localhost:3000](http://localhost:3000). Open this URL in your browser to view the app. The app supports hot reloading, meaning your changes will automatically reflect in the browser without needing to refresh.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Linting
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To check for linting errors, run:
 
-## Learn More
+```bash
+npm run lint
+# or
+yarn lint
+# or
+pnpm lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+Linting is configured using **ESLint**, extending the `next/core-web-vitals` rule set for optimal performance and coding standards.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Build for Production
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+To create a production build of the app:
 
-## Deploy on Vercel
+```bash
+npm run build
+# or
+yarn build
+# or
+pnpm build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This command generates an optimized, production-ready build of your Next.js application in the `.next/` folder.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### 5. Deploy
+
+The recommended way to deploy the app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
+
+For more information, see [Next.js deployment documentation](https://nextjs.org/docs/deployment).
+
+## Tailwind CSS Configuration
+
+This project uses **Tailwind CSS** for styling. The configuration can be found in `tailwind.config.ts`, which includes custom colors and font settings:
+
+```ts
+const config = {
+  theme: {
+    colors: {
+      orange: "#f08f4f",
+      red: "#E05858FF",
+      black: "#000000",
+      white: "#FFFFFF",
+      lightgrey: "#686868FF",
+      grey: "#222222FF",
+      darkgrey: "#111111",
+      transparent: "#00000000",
+    },
+    fontFamily: {
+      mono: ['Courier New', 'monospace']
+    }
+  },
+  // Add your own paths here to configure which files Tailwind should scan for class names.
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+};
+```
+
+## Ant Design Integration
+
+**Ant Design** has been integrated into the project, with custom theming applied via the `ConfigProvider` in `layout.tsx`. Below is an example of how a custom button hover effect is configured:
+
+```tsx
+<ConfigProvider
+  theme={{
+    components: {
+      Button: {
+        defaultHoverBorderColor: "orange",
+        defaultHoverColor: "black"
+      }
+    }
+  }}
+>
+  {children}
+</ConfigProvider>
+```
+
+To use Ant Design components, simply import them into your pages or components like this:
+
+```tsx
+import { Button } from 'antd';
+
+<Button type="primary">Click Me</Button>;
+```
