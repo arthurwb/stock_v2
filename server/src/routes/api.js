@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 
 const router = express.Router();
 
-const Options = require("../models/option.js");
-const Users = require("../models/users.js");
+const Options = require("../models/option");
+const Users = require("../models/users");
 
 router.get('/', async (req, res) => {
   const options = await Options.find();
-  res.json({ message: 'Connected to Database', options: options });
+  res.json({ message: 'Connected to Database', options });
 });
 
 router.post('/test', async (req, res) => {

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema;
+const {Schema} = mongoose;
 const optionSchema = new Schema({
   name: String,
   price: Number,

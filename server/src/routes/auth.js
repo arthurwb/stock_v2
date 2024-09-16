@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 
 const router = express.Router();
 
-const Options = require("../models/option.js");
-const Users = require("../models/users.js");
+const Options = require("../models/option");
+const Users = require("../models/users");
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;

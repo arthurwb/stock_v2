@@ -45,7 +45,7 @@ Ensure you have the following installed on your system:
 
    ```bash
    PORT=8080
-   URI=mongodb+srv://admin:admin@qb3cluster.sknm95g.mongodb.net/stocks?retryWrites=true&w=majority
+   URI=(your mongo uri)
    TICKCOUNT=5000
    ```
 
