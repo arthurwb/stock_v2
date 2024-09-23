@@ -1,170 +1,52 @@
-# The Exchange - Server
+# Keystone Project Starter
 
-This project is a RESTful API for a stock trading simulation, built using Express.js and MongoDB. It allows users to manage stock options, perform trading actions, and handle user authentication. This boilerplate comes with common tools such as ESLint for linting, Prettier for code formatting, Jest for testing, and Nodemon for automatic server reloading during development.
+Welcome to Keystone!
 
-## Features
+Run
 
-- User authentication: login and create new users
-- Stock trading: buy and sell stock options
-- Database connection to MongoDB using Mongoose
-- Periodic update of stock prices with historical data
-- Includes ESLint with Airbnb style guide and Prettier for code consistency
-- Jest for testing with watch mode
-- Environment configuration using `.env`
-
----
-
-## Getting Started
-
-### Prerequisites
-
-Ensure you have the following installed on your system:
-
-- [Node.js](https://nodejs.org/en/download/)
-- [MongoDB](https://www.mongodb.com/)
-- [NPM](https://www.npmjs.com/)
-
-### Setup
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/your-repo/stock-trading-api.git
-   cd stock-trading-api/server
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Environment Configuration**
-
-   Create a `.env` file in the root directory and set the following values:
-
-   ```bash
-   PORT=8080
-   URI=(your mongo uri)
-   TICKCOUNT=5000
-   ```
-
-   - `PORT`: The port number where the server will run.
-   - `URI`: MongoDB connection string.
-   - `TICKCOUNT`: Time interval (in milliseconds) for stock price updates.
-
-### Running the API
-
-- **Development Mode**
-
-  Starts the API in development mode with [Nodemon](https://github.com/remy/nodemon) to automatically restart the server on changes.
-
-  ```bash
-  npm run dev
-  ```
-
-- **Production Mode**
-
-  Runs the API in production mode.
-
-  ```bash
-  npm start
-  ```
-
-  The server will start on `localhost:8080` (or another port if specified in the `.env` file).
-
-### Running Tests
-
-Run the unit tests using Jest:
-
-```bash
-npm test
+```
+npm run dev
 ```
 
-You can also run Jest in watch mode:
+To view the config for your new app, look at [./keystone.ts](./keystone.ts)
 
-```bash
-npm run test:watch
-```
+This project starter is designed to give you a sense of the power Keystone can offer you, and show off some of its main features. It's also a pretty simple setup if you want to build out from it.
 
-### Linting
+We recommend you use this alongside our [getting started walkthrough](https://keystonejs.com/docs/walkthroughs/getting-started-with-create-keystone-app) which will walk you through what you get as part of this starter.
 
-To lint your code using ESLint and Prettier:
+If you want an overview of all the features Keystone offers, check out our [features](https://keystonejs.com/why-keystone#features) page.
 
-```bash
-npm run lint
-```
+## Some Quick Notes On Getting Started
 
-To automatically fix linting issues:
+### Changing the database
 
-```bash
-npm run lint:fix
-```
+We've set you up with an [SQLite database](https://keystonejs.com/docs/apis/config#sqlite) for ease-of-use. If you're wanting to use PostgreSQL, you can!
 
----
+Just change the `db` property on line 16 of the Keystone file [./keystone.ts](./keystone.ts) to
 
-## Project Structure
-
-- `.env`: Configuration for the app (port, MongoDB URI, tick interval).
-- `.eslintrc`: ESLint configuration using the Airbnb style guide and Prettier plugin.
-- `.prettierrc`: Prettier code formatting settings.
-- `package.json`: Project dependencies, scripts, and configuration.
-- `src/`: Contains the source code for the app.
-  - `app.js`: Main app entry point.
-  - `routes/`: API routes for index, authentication, stock trading, etc.
-  - `models/`: Mongoose schemas for users and stock options.
-  - `middleware/`: Middleware for error handling and async handling.
-  - `util/`: Utility functions like periodic stock updates.
-  - `__tests__/`: Test cases using Jest.
-- `www`: Server bootstrap script that starts the HTTP server.
-
----
-
-## API Endpoints
-
-- **`GET /`**: Simple route to confirm the server is running.
-- **`GET /api`**: Fetches all stock options.
-- **`POST /auth/login`**: User login with username and password.
-- **`POST /auth/createUser`**: Create a new user with username, password, carrots (user's stock holdings), and wallet balance.
-- **`POST /saction/buy/:option`**: Buy a specified amount of stock options.
-- **`POST /saction/sell/:option`**: Sell a specified amount of stock options.
-
----
-
-## Development Tools
-
-- **ESLint**: Enforces code style using the Airbnb base configuration.
-- **Prettier**: Code formatting to ensure consistency.
-- **Nodemon**: Restarts the server when file changes are detected in development mode.
-- **Jest**: Testing framework with snapshot and unit tests.
-
----
-
-## Database Schema
-
-### User Model
-
-```json
-{
-  "username": "String",
-  "password": "String",
-  "carrots": "Map", // stock options owned by the user
-  "wallet": "Number" // user's account balance
+```typescript
+db: {
+    provider: 'postgresql',
+    url: process.env.DATABASE_URL || 'DATABASE_URL_TO_REPLACE',
 }
 ```
 
-### Option Model
+And provide your database url from PostgreSQL.
 
-```json
-{
-  "name": "String",
-  "price": "Number", // current price of the option
-  "historicalPrices": "[Number]" // previous prices for historical tracking
-}
-```
+For more on database configuration, check out or [DB API Docs](https://keystonejs.com/docs/apis/config#db)
 
----
+### Auth
 
-## License
+We've put auth into its own file to make this humble starter easier to navigate. To explore it without auth turned on, comment out the `isAccessAllowed` on line 21 of the Keystone file [./keystone.ts](./keystone.ts).
 
-This project is licensed under the MIT License.
+For more on auth, check out our [Authentication API Docs](https://keystonejs.com/docs/apis/auth#authentication-api)
+
+### Adding a frontend
+
+As a Headless CMS, Keystone can be used with any frontend that uses GraphQL. It provides a GraphQL endpoint you can write queries against at `/api/graphql` (by default [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql)). At Thinkmill, we tend to use [Next.js](https://nextjs.org/) and [Apollo GraphQL](https://www.apollographql.com/docs/react/get-started/) as our frontend and way to write queries, but if you have your own favourite, feel free to use it.
+
+A walkthrough on how to do this is forthcoming, but in the meantime our [todo example](https://github.com/keystonejs/keystone-react-todo-demo) shows a Keystone set up with a frontend. For a more full example, you can also look at an example app we built for [Prisma Day 2021](https://github.com/keystonejs/prisma-day-2021-workshop)
+
+### Embedding Keystone in a Next.js frontend
+
+While Keystone works as a standalone app, you can embed your Keystone app into a [Next.js](https://nextjs.org/) app. This is quite a different setup to the starter, and we recommend checking out our walkthrough for that [here](https://keystonejs.com/docs/walkthroughs/embedded-mode-with-sqlite-nextjs#how-to-embed-keystone-sq-lite-in-a-next-js-app).
