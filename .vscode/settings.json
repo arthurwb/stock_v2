@@ -21,5 +21,9 @@
         "**/*.sass",
         "**/*.less",
         "**/*.styl"
+    ],
+    "cSpell.words": [
+        "saction",
+        "TICKCOUNT"
     ]
 }

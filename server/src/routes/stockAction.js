@@ -2,8 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
-const Options = require("../models/option.js");
-const Users = require("../models/users.js");
+const Options = require("../models/option");
+const Users = require("../models/users");
 
 router.post('/buy/:option', async (req, res) => {
   const { username, amount } = req.body;
@@ -18,7 +18,7 @@ router.post('/buy/:option', async (req, res) => {
         .json({ success: false, message: `User '${username}' not found` });
       return;
     }
-    console.log('user found: ' + user);
+    console.log(`user found: ${user}`);
 
     // Find the option by name
     const optionToAdd = await Options.findOne({ name: option }).exec();
@@ -29,13 +29,13 @@ router.post('/buy/:option', async (req, res) => {
       return;
     }
     console.log(
-      'option found: ' + optionToAdd.name + ' - ' + optionToAdd.price,
+      `option found: ${optionToAdd.name} - ${optionToAdd.price}`,
     );
 
     let optionFound = false;
     user.carrots.forEach((value, key) => {
       console.log(value);
-      if (key == optionToAdd.name) {
+      if (key === optionToAdd.name) {
         user.carrots.set(key, value + amount);
         optionFound = true;
       }
@@ -46,13 +46,13 @@ router.post('/buy/:option', async (req, res) => {
     }
 
     if (user.wallet >= optionToAdd.price) {
-      user.wallet = user.wallet - optionToAdd.price * amount;
+      user.wallet -= optionToAdd.price * amount;
     } else {
       res.status(404).json({ success: false, message: `Wallet Insufficient` });
       return;
     }
 
-    console.log('bef save:' + user);
+    console.log(`bef save:${user}`);
     // Save the updated user object
     await user.save();
 
@@ -80,7 +80,7 @@ router.post('/sell/:option', async (req, res) => {
         .json({ success: false, message: `User '${username}' not found` });
       return;
     }
-    console.log('user found: ' + user);
+    console.log(`user found: ${user}`);
 
     // Find the option by name
     const optionToSell = await Options.findOne({ name: option }).exec();
@@ -91,13 +91,13 @@ router.post('/sell/:option', async (req, res) => {
       return;
     }
     console.log(
-      'option found: ' + optionToSell.name + ' ' + optionToSell.price,
+      `option found: ${optionToSell.name} ${optionToSell.price}`,
     );
 
     let optionFound = false;
     user.carrots.forEach((value, key) => {
       console.log(value);
-      if (key == optionToSell.name) {
+      if (key === optionToSell.name) {
         if (value < amount) {
           res.status(400).json({
             success: false,
@@ -120,7 +120,7 @@ router.post('/sell/:option', async (req, res) => {
       return;
     }
 
-    console.log('bef save:' + user);
+    console.log(`bef save:${user}`);
     // Save the updated user object
     await user.save();
 

@@ -16,12 +16,10 @@ export default function TerminalInput() {
     return () => clearInterval(interval);
   }, []);
 
-  // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  // Handle key press events
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Prevent the default action of form submission or new line in the input
@@ -56,7 +54,6 @@ export default function TerminalInput() {
   };
 
   // Handle the data submission
-  // Handle the data submission
   const handleSubmit = async () => {
         const payload = {
             username: username,
@@ -90,8 +87,6 @@ export default function TerminalInput() {
     <div className="basis-1/12">
       <div className="flex flex-row items-center h-full w-full text-white font-bold text-3xl">
         <span className="px-2 text-orange">test@RT-25-SW$~: </span>
-        
-        {/* Input wrapper to manage custom caret */}
         <div className="flex-1 h-full flex items-center relative">
           <input
             type="text"
@@ -102,11 +97,7 @@ export default function TerminalInput() {
             onKeyDown={handleKeyDown}
             autoFocus
           />
-          
-          {/* Display the input text */}
           <span className="whitespace-pre-wrap">{inputValue}</span>
-          
-          {/* Custom blinking caret */}
           {isBarVisible && (
             <span id='blinkingBar' className="blinking-bar bg-white w-[10px] h-[36px]" style={{ display: blinkingBarVisibility }}></span>
           )}

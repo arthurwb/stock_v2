@@ -1,11 +1,12 @@
+/* eslint-disable no-unused-vars */
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const cors = require('cors'); // Import cors
 const dotenv = require("dotenv");
 
-const Options = require("./models/option.js");
-const Users = require("./models/users.js");
+const Options = require("./models/option");
+const Users = require("./models/users");
 const { tickUpdateOptions, anotherUtilityFunction } = require("./util/util");
 
 const indexRoute = require('./routes/index');

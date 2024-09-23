@@ -6,11 +6,14 @@ async function tickUpdateOptions() {
   try {
     const optionsToUpdate = ["google", "microsoft", "amazon"];
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const optionName of optionsToUpdate) {
+      // eslint-disable-next-line no-await-in-loop
       const option = await Options.findOne({ name: optionName });
 
       if (!option) {
         console.log(`Option '${optionName}' not found`);
+        // eslint-disable-next-line no-continue
         continue;
       }
 
@@ -27,13 +30,14 @@ async function tickUpdateOptions() {
           option.historicalPrices.shift();
         }
       }
-      console.log(option.name + " + tick");
+      console.log(`${option.name} = ${option.price}`);
+      // eslint-disable-next-line no-await-in-loop
       await option.save();
 
       // console.log(`Option '${optionName}' updated: ${option.price}`);
     }
   } catch (error) {
-    console.log("Internal Server Error: " + error);
+    console.log(`Internal Server Error: ${error}`);
   }
 }
 
