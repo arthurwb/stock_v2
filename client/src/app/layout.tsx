@@ -3,9 +3,8 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Button, ConfigProvider, Space } from 'antd';
+import { Button, ConfigProvider } from 'antd';
 import "./globals.css";
-import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +23,9 @@ export default function RootLayout({
       <AntdRegistry>
         <ConfigProvider
           theme={{
+            token: {
+              colorTextBase: 'white', // Set base text color
+            },
             components: {
               Button: {
                 defaultHoverBorderColor: "orange",
@@ -32,9 +34,9 @@ export default function RootLayout({
             }
           }}
         >
-          <body className="font-mono">{children}</body>
+          <body className="relative font-mono text-white">{children}</body>
         </ConfigProvider>
       </AntdRegistry>
     </html>
-  )
+  );
 }

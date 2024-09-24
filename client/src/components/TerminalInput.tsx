@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import Loading from './Loading';
+import { interpretCommand } from '@/utility/commandInterpreter';
 
-export default function TerminalInput() {
+interface TerminalInputProps {
+  onCommandOutput: (output: React.ReactNode) => void;
+}
+
+export default function TerminalInput({ onCommandOutput }: TerminalInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [isBarVisible, setIsBarVisible] = useState(true);
   const [username, setUsername] = useState('defaultUser');
-  const [caretVisibility, setCaretVisibility] = useState('transparent');
+  const [caretVisibility, setCaretVisibility] = useState('caret-transparent');
   const [blinkingBarVisibility, setBlinkingBarVisibility] = useState('block');
   const [caretMovement, setCaretMovement] = useState(0);
+  const [loading, setLoading] = useState(false); // Loading state
 
   // Toggle the visibility of the blinking bar (caret)
   useEffect(() => {
@@ -27,27 +34,25 @@ export default function TerminalInput() {
     }
     if (e.key === 'ArrowLeft') {
       setCaretMovement(prevCaretMovement => {
-        if (prevCaretMovement != -inputValue.length) {
-            const newCaretMovement = prevCaretMovement - 1;
-            setCaretVisibility(newCaretMovement === 0 ? 'transparent' : 'white');
-            setBlinkingBarVisibility(newCaretMovement === 0 ? 'block' : 'none');
-            console.log('end left: ' + newCaretMovement);
-            return newCaretMovement;
+        if (prevCaretMovement !== -inputValue.length) {
+          const newCaretMovement = prevCaretMovement - 1;
+          setCaretVisibility(newCaretMovement === 0 ? 'caret-transparent' : 'caret-white');
+          setBlinkingBarVisibility(newCaretMovement === 0 ? 'block' : 'none');
+          return newCaretMovement;
         } else {
-            return prevCaretMovement;
+          return prevCaretMovement;
         }
       });
     }
     if (e.key === 'ArrowRight') {
       setCaretMovement(prevCaretMovement => {
         if (prevCaretMovement < 0) {
-            const newCaretMovement = prevCaretMovement + 1;
-            setCaretVisibility(newCaretMovement === 0 ? 'transparent' : 'white');
-            setBlinkingBarVisibility(newCaretMovement === 0 ? 'block' : 'none');
-            console.log('end right: ' + newCaretMovement);
-            return newCaretMovement;
+          const newCaretMovement = prevCaretMovement + 1;
+          setCaretVisibility(newCaretMovement === 0 ? 'caret-transparent' : 'caret-white');
+          setBlinkingBarVisibility(newCaretMovement === 0 ? 'block' : 'none');
+          return newCaretMovement;
         } else {
-            return prevCaretMovement;
+          return prevCaretMovement;
         }
       });
     }
@@ -55,54 +60,34 @@ export default function TerminalInput() {
 
   // Handle the data submission
   const handleSubmit = async () => {
-        const payload = {
-            username: username,
-            data: inputValue,
-        };
-
-        try {
-            const response = await fetch('http://localhost:8080/api/test', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if (response.ok) {
-                console.log('Request successful');
-            } else {
-                console.error('Request failed with status', response.status);
-            }
-
-            setInputValue('');
-        } catch (error) {
-            console.error('Fetch error:', error);
-        }
-    };
-
-    
+    setLoading(true); // Set loading to true
+    const output = await interpretCommand(inputValue);
+    onCommandOutput(output); // Pass the interpreted output to the parent component
+    setInputValue('');
+    setLoading(false); // Set loading to false
+  };
 
   return (
-    <div className="basis-1/12">
-      <div className="flex flex-row items-center h-full w-full text-white font-bold text-3xl">
-        <span className="px-2 text-orange">test@RT-25-SW$~: </span>
-        <div className="flex-1 h-full flex items-center relative">
-          <input
-            type="text"
-            id='userInput'
-            className={`absolute left-0 top-0 w-full h-full bg-transparent focus:outline-none caret-${caretVisibility}`}
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            autoFocus
-          />
-          <span className="whitespace-pre-wrap">{inputValue}</span>
-          {isBarVisible && (
-            <span id='blinkingBar' className="blinking-bar bg-white w-[10px] h-[36px]" style={{ display: blinkingBarVisibility }}></span>
-          )}
+    <div className="basis-1/12 flex items-center">
+        <div className="flex flex-row items-center h-full w-full text-white text-3xl">
+            <span className="px-2 text-orange">test@RT-25-SW$~: </span>
+            <div className="flex-1 h-full flex items-center relative">
+                <input
+                    type="text"
+                    id='userInput'
+                    className={`absolute left-0 top-0 w-full h-full bg-transparent focus:outline-none ${caretVisibility}`}
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    autoFocus
+                />
+                <span className="whitespace-pre-wrap">{inputValue}</span>
+                {isBarVisible && (
+                    <span id='blinkingBar' className="blinking-bar bg-white w-[10px] h-[36px]" style={{ display: blinkingBarVisibility }}></span>
+                )}
+            </div>
         </div>
-      </div>
+        {loading && <Loading label="Loading..."/>} {/* Show loading component */}
     </div>
-  );
+);
 }

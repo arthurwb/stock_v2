@@ -6,7 +6,7 @@ def consolidate_files(root_dir, output_file, exclude_dirs=None, exclude_files=No
         exclude_dirs = ['node_modules', 'venv', '__pycache__', '.git', '.next']
     
     if exclude_files is None:
-        exclude_files = ['package-lock.json', 'yarn.lock', 'favicon.ico']
+        exclude_files = ['package-lock.json', 'yarn.lock', 'favicon.ico', 'README.md']
     
     if exclude_extensions is None:
         exclude_extensions = []  # Default to an empty list if no extensions are provided

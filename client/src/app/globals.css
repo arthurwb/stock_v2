@@ -42,6 +42,18 @@ body {
   }
 }
 
+.border-1 {
+  border-width: 1px;
+}
+
+.border-t-1 {
+  border-top-width: 1px;
+}
+
+.border-x-1 {
+  border-left-width: 1px;
+  border-right-width: 1px;
+}
 
 @layer utilities {
   .text-balance {
