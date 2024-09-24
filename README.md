@@ -204,7 +204,7 @@ Ensure you have the following installed on your system:
 
    ```bash
    PORT=8080
-   URI=(your mongo uri)
+   DATABASE_URL=(your mongo uri)
    TICKCOUNT=5000
    ```
 
