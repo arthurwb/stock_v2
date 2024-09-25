@@ -33,7 +33,7 @@ export default function Home() {
                         <div className="basis-6/12"></div>
                     </div>
                 </div>
-                <div className="flex flex-col basis-10/12 px-2 pt-3 border-green border-x-1 border-t-1 border-solid">
+                <div className="flex flex-col basis-10/12 px-2 pt-2 border-green border-x-1 border-t-1 border-solid">
                     {/* Render the command output */}
                     <div className="flex-1 overflow-auto">{commandOutput}</div>
                     <TerminalInput onCommandOutput={handleCommandOutput} />

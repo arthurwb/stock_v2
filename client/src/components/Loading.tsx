@@ -5,9 +5,10 @@ interface LoadingProps {
     label: string;
     children?: ReactNode;
     className?: string;
+    message?: string
 }
 
-const Loading: React.FC<LoadingProps> = ({ label, className = "" }) => {
+const Loading: React.FC<LoadingProps> = ({ label, className = "", message }) => {
     const loadingMessages = [
         "Building the executive terrain...",
         "Please wait a moment...",
@@ -27,7 +28,7 @@ const Loading: React.FC<LoadingProps> = ({ label, className = "" }) => {
     return (
         <div className={`absolute top-0 left-0 w-full h-full flex items-center justify-center ${className}`}>
             <BorderedSection label={label} className='p-4' border='border-yellow'>
-                <span className="text-white">{randomMessage}</span>
+                <span className="text-white">{message || randomMessage}</span>
             </BorderedSection>
         </div>
     );
