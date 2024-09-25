@@ -3,14 +3,7 @@ import React from 'react';
 import BorderedSection from './BorderedSection';
 import Loading from './Loading';
 
-interface Option {
-  optionName: string;
-  price: number;
-}
-
-interface OptionDisplayProps {
-  options: Option[];
-}
+import { Option, OptionDisplayProps } from '@/app/types/optionTypes';
 
 const OptionDisplay: React.FC<OptionDisplayProps> = ({ options }) => {
   return (

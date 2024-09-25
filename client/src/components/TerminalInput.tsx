@@ -62,6 +62,7 @@ export default function TerminalInput({ onCommandOutput }: TerminalInputProps) {
   const handleSubmit = async () => {
     setLoading(true); // Set loading to true
     const output = await interpretCommand(inputValue);
+    console.log(output);
     onCommandOutput(output); // Pass the interpreted output to the parent component
     setInputValue('');
     setLoading(false); // Set loading to false

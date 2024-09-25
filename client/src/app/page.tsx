@@ -10,6 +10,7 @@ export default function Home() {
 
     // Function to handle the output from TerminalInput
     const handleCommandOutput = (output: React.ReactNode) => {
+        console.log(output);
         setCommandOutput(output);
     };
 
