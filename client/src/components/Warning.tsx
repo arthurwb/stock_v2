@@ -10,7 +10,7 @@ interface WarningProps {
 const Warning: React.FC<WarningProps> = ({ message, children, className = "" }) => {
     return (
         <div className={`absolute top-0 left-0 w-full h-full flex items-center justify-center ${className}`}>
-            <BorderedSection label='warning' className='p-4'>
+            <BorderedSection label='warning' className='p-4' border='border-red'>
                 <span className="text-white">{message}</span>
                 {children}
             </BorderedSection>

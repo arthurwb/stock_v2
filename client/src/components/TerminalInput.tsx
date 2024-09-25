@@ -13,13 +13,12 @@ export default function TerminalInput({ onCommandOutput }: TerminalInputProps) {
   const [caretVisibility, setCaretVisibility] = useState('caret-transparent');
   const [blinkingBarVisibility, setBlinkingBarVisibility] = useState('block');
   const [caretMovement, setCaretMovement] = useState(0);
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
 
-  // Toggle the visibility of the blinking bar (caret)
   useEffect(() => {
     const interval = setInterval(() => {
       setIsBarVisible((prev) => !prev);
-    }, 500); // Flash every 500ms
+    }, 500);
     return () => clearInterval(interval);
   }, []);
 
@@ -29,7 +28,7 @@ export default function TerminalInput({ onCommandOutput }: TerminalInputProps) {
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent the default action of form submission or new line in the input
+      e.preventDefault();
       await handleSubmit();
     }
     if (e.key === 'ArrowLeft') {
@@ -62,15 +61,14 @@ export default function TerminalInput({ onCommandOutput }: TerminalInputProps) {
   const handleSubmit = async () => {
     setLoading(true); // Set loading to true
     const output = await interpretCommand(inputValue);
-    console.log(output);
-    onCommandOutput(output); // Pass the interpreted output to the parent component
+    onCommandOutput(output);
     setInputValue('');
-    setLoading(false); // Set loading to false
+    setLoading(false);
   };
 
   return (
     <div className="basis-1/12 flex items-center">
-        <div className="flex flex-row items-center h-full w-full text-white text-3xl">
+        <div className="flex flex-row items-center h-full w-full text-white text-2xl">
             <span className="px-2 text-orange">test@RT-25-SW$~: </span>
             <div className="flex-1 h-full flex items-center relative">
                 <input
@@ -84,7 +82,7 @@ export default function TerminalInput({ onCommandOutput }: TerminalInputProps) {
                 />
                 <span className="whitespace-pre-wrap">{inputValue}</span>
                 {isBarVisible && (
-                    <span id='blinkingBar' className="blinking-bar bg-white w-[10px] h-[36px]" style={{ display: blinkingBarVisibility }}></span>
+                    <span id='blinkingBar' className="blinking-bar bg-white w-[8px] h-[24px]" style={{ display: blinkingBarVisibility }}></span>
                 )}
             </div>
         </div>

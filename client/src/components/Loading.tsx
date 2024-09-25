@@ -26,7 +26,7 @@ const Loading: React.FC<LoadingProps> = ({ label, className = "" }) => {
 
     return (
         <div className={`absolute top-0 left-0 w-full h-full flex items-center justify-center ${className}`}>
-            <BorderedSection label={label} className='p-4'>
+            <BorderedSection label={label} className='p-4' border='border-yellow'>
                 <span className="text-white">{randomMessage}</span>
             </BorderedSection>
         </div>

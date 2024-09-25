@@ -10,7 +10,6 @@ export default function Home() {
 
     // Function to handle the output from TerminalInput
     const handleCommandOutput = (output: React.ReactNode) => {
-        console.log(output);
         setCommandOutput(output);
     };
 
@@ -18,7 +17,9 @@ export default function Home() {
         <main>
             <div className="relative flex flex-col px-4 w-screen h-screen bg-black">
                 <div className="flex flex-row basis-2/12 p-2">
-                    <div className="basis-5/12 m-2"></div>
+                    <div className="basis-5/12 m-2">
+                        <p>--help: show commands</p>
+                    </div>
                     <BorderedSection label="Section 1" className="basis-2/12 m-2">
                         image
                     </BorderedSection>

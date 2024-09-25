@@ -7,7 +7,7 @@ TODO:
 import React from 'react';
 import OptionDisplay from '@/components/OptionDisplay';
 import optionCommands from '@/utility/commands/OptionCommands';
-import utilityCommands from '@/utility/commands/UtilityCommands'
+import utilityCommands from '@/utility/commands/UtilityCommands';
 import Warning from '@/components/Warning';
 
 // The utility function that interprets commands
@@ -20,7 +20,7 @@ export async function interpretCommand(command: string): Promise<React.ReactNode
       switch (commandArray[1]) {
         case 'options': {
           const options = await optionCommands.getUserOptions(["microsoft", "google", "amazon"]);
-          return  <OptionDisplay options={options} />// Replace with options based on user options later
+          return <OptionDisplay options={options} />// Replace with options based on user options later
         }
         default: {
           return <Warning message={`Unknown Command: ${trimmedCommand}`}></Warning>;
@@ -40,6 +40,11 @@ export async function interpretCommand(command: string): Promise<React.ReactNode
     case 'clear':
     case 'c': {
       return utilityCommands.clear();
+    }
+    case 'help':
+    case '--help':
+    case '-h': {
+      return utilityCommands.help();
     }
     case 'dog': {
       return utilityCommands.dog();
