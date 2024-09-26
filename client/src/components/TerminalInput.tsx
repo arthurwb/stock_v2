@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
+import { useUser } from '@auth0/nextjs-auth0/client';
+
 import Loading from './Loading';
 import { interpretCommand } from '@/utility/commandInterpreter';
 
@@ -66,10 +69,22 @@ export default function TerminalInput({ onCommandOutput }: TerminalInputProps) {
     setLoading(false);
   };
 
+  const GetUsername = () => {
+    const { user, error, isLoading } = useUser();
+    if (isLoading) return "Loading...";
+    if (error) return `Error: ${error.message}`;
+
+    if (user?.name) {
+      return user.name.split('@')[0];
+    } else {
+      return 'undefined';
+    }
+  }
+
   return (
     <div className="basis-1/12 flex items-center">
         <div className="flex flex-row items-center h-full w-full text-white text-2xl">
-            <span className="px-2 text-orange">test@RT-25-SW$~: </span>
+            <span className="px-2 text-orange"><GetUsername></GetUsername>$-:</span>
             <div className="flex-1 h-full flex items-center relative">
                 <input
                     type="text"
@@ -78,6 +93,7 @@ export default function TerminalInput({ onCommandOutput }: TerminalInputProps) {
                     value={inputValue}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
+                    autoComplete='off'
                     autoFocus
                 />
                 <span className="whitespace-pre-wrap">{inputValue}</span>

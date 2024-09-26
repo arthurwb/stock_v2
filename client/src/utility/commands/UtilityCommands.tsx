@@ -17,11 +17,13 @@ const utilityCommands = {
             <div className="flex flex-row">
                 <div className="row" style={{marginRight: 100}}>
                     <h1 style={{ color: "red"}}>Utility Commands</h1>
-                    <p>&nbsp;&nbsp;clear | c</p>
-                    <p>&nbsp;&nbsp;help | --help | -h</p>
-                    <p>&nbsp;&nbsp;dog</p>
+                    <div className="m-4">
+                        <p>clear | c</p>
+                        <p>help | --help | -h</p>
+                        <p>dog</p>
+                    </div>
                     <h1 style={{ color: "red" }}>Option Commands</h1>
-                    <p>&nbsp;&nbsp;get options</p>
+                    <p>get options</p>
                 </div>
                 <div className="row">
                     <br />

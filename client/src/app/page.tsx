@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState } from "react";
+import UserInformation from "@/components/UserInformation";
 import TerminalInput from "@/components/TerminalInput";
 import BorderedSection from "@/components/BorderedSection";
 
@@ -20,15 +21,12 @@ export default function Home() {
                     <div className="basis-5/12 m-2">
                         <p>--help: show commands</p>
                     </div>
-                    <BorderedSection label="Section 1" className="basis-2/12 m-2">
+                    <BorderedSection label="Logo" className="basis-2/12 m-2">
                         image
                     </BorderedSection>
                     <div className="flex flex-col basis-5/12 m-2">
-                        <div className="flex flex-row basis-6/12">
-                            <div className="basis-6/12"></div>
-                            <BorderedSection label="Section 2" className="basis-6/12">
-                                user data
-                            </BorderedSection>
+                        <div className="flex flex-col basis-6/12 text-center">
+                            <UserInformation></UserInformation>
                         </div>
                         <div className="basis-6/12"></div>
                     </div>

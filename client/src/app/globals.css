@@ -26,6 +26,10 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+a:hover {
+  color: red;
+}
+
 .blinking-bar {
   display: inline-block;
   margin-left: 2px;

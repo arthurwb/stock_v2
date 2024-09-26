@@ -206,6 +206,7 @@ Ensure you have the following installed on your system:
    PORT=8080
    DATABASE_URL=(your mongo uri)
    TICKCOUNT=5000
+   DATABASE_COUNT=150  # total number of database entries between all options
    ```
 
    - `PORT`: The port number where the server will run.

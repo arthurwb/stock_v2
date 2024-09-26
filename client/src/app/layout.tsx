@@ -2,7 +2,9 @@ import React from "react";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 import { Overpass_Mono } from "next/font/google";
-const overpass_mono = Overpass_Mono({ subsets: ['latin']})
+const overpass_mono = Overpass_Mono({ subsets: ['latin']});
+
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -23,27 +25,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AntdRegistry>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorTextBase: 'white', // Set base text color
-            },
-            components: {
-              Button: {
-                defaultHoverBorderColor: "orange",
-                defaultHoverColor: "black"
+        <AntdRegistry>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorTextBase: 'white', // Set base text color
+              },
+              components: {
+                Button: {
+                  defaultHoverBorderColor: "orange",
+                  defaultHoverColor: "black"
+                }
               }
-            }
-          }}
-        >
-          <body className="relative font-mono text-white">
-            <div className={overpass_mono.className}>
-              {children}
-            </div>
-          </body>
-        </ConfigProvider>
-      </AntdRegistry>
+            }}
+          >
+            <UserProvider>
+              <body className="relative font-mono text-white">
+                <div className={overpass_mono.className}>
+                  {children}
+                </div>
+              </body>
+            </UserProvider>
+          </ConfigProvider>
+        </AntdRegistry>
     </html>
   );
 }
