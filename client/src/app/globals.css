@@ -26,6 +26,10 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+a:hover {
+  color: red;
+}
+
 .blinking-bar {
   display: inline-block;
   margin-left: 2px;
@@ -40,6 +44,13 @@ body {
   100% {
     opacity: 1;
   }
+}
+
+.container {
+  scrollbar-width: none;
+}
+.container::-webkit-scrollbar {
+  display: none;
 }
 
 .border-1 {

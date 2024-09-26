@@ -204,8 +204,9 @@ Ensure you have the following installed on your system:
 
    ```bash
    PORT=8080
-   URI=(your mongo uri)
+   DATABASE_URL=(your mongo uri)
    TICKCOUNT=5000
+   DATABASE_COUNT=150  # total number of database entries between all options
    ```
 
    - `PORT`: The port number where the server will run.
