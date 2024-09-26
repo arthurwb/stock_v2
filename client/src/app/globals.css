@@ -42,6 +42,13 @@ body {
   }
 }
 
+.container {
+  scrollbar-width: none;
+}
+.container::-webkit-scrollbar {
+  display: none;
+}
+
 .border-1 {
   border-width: 1px;
 }

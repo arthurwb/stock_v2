@@ -1,26 +1,39 @@
-import type { Context } from ".keystone/types";
-// import cors from "cors";
-import type { Express } from "express";
-import express from "express";
-import { json } from "express";
+
 import { PrismaClient } from '@prisma/client';
 
-import { OptionByName } from "../requestDefs";
-import { isConstructorDeclaration } from "typescript";
+import { Option } from '../requestDefs';
 
 const prisma = new PrismaClient();
 
-const query = {
-    getOptions: async (req: string) => {
-        if (req) {;
-            const option = await prisma.tOptions.findFirst({
+const querys = {
+    getOptions: async () => {
+        const options = await prisma.tOptions.findMany();
+        let optionArr: Option[] = [];
+
+        for (const option of options) {
+            const historicalPrices = await prisma.tHistoricalPrices.findMany({
                 where: {
-                    optionName: req
+                    optionIdId: option.id
                 }
             });
-            return option;
+            optionArr.push({
+                option: option,
+                historicalPrices: historicalPrices
+            });
         }
+
+        console.log(optionArr); // This will now print the populated array
+        return optionArr;
     }
 }
 
-export default query;
+
+export default async function query(type: string, data?: string) {
+    switch (type) {
+        case 'get-allOptions':
+            const allOptions = await querys.getOptions();
+            return allOptions;
+        default:
+            return []
+    }
+};

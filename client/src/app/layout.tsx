@@ -1,6 +1,9 @@
 import React from "react";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 
+import { Overpass_Mono } from "next/font/google";
+const overpass_mono = Overpass_Mono({ subsets: ['latin']})
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Button, ConfigProvider } from 'antd';
@@ -34,7 +37,11 @@ export default function RootLayout({
             }
           }}
         >
-          <body className="relative font-mono text-white">{children}</body>
+          <body className="relative font-mono text-white">
+            <div className={overpass_mono.className}>
+              {children}
+            </div>
+          </body>
         </ConfigProvider>
       </AntdRegistry>
     </html>

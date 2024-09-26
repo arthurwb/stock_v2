@@ -26,7 +26,7 @@ export async function extendExpressApp(app: Express, context: Context) {
     });
 
     app.post("/query", async (req, res) => {
-        const result = await query.getOptions(req.body.optionName);
+        const result = await query(req.body.type);
         res.send(result);
     });
 }

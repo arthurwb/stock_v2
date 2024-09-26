@@ -19,8 +19,7 @@ export async function interpretCommand(command: string): Promise<React.ReactNode
     case 'get': {
       switch (commandArray[1]) {
         case 'options': {
-          const options = await optionCommands.getUserOptions(["microsoft", "google", "amazon"]);
-          return <OptionDisplay options={options} />// Replace with options based on user options later
+          return await optionCommands.getOptions();
         }
         default: {
           return <Warning message={`Unknown Command: ${trimmedCommand}`}></Warning>;
