@@ -1,7 +1,6 @@
 /*
 TODO:
   Add buy option command: relies on learning mutations through keystone
-  Add help command: -h --help displays a list of all commands.
 */
 
 import React from 'react';
@@ -11,12 +10,19 @@ import utilityCommands from '@/utility/commands/UtilityCommands';
 import authCommands from '@/utility/commands/AuthCommands';
 import Warning from '@/components/Warning';
 
+const commands = [
+  'get options',
+  'add options',
+  'login', 'logout',
+  'c', 'clear',
+  'help', '--help', '-h',
+  'dog'
+]
+
 // The utility function that interprets commands
 export async function interpretCommand(command: string): Promise<React.ReactNode | null> {
   const trimmedCommand = command.trim().toLowerCase();
   const commandArray = trimmedCommand.split(" ");
-
-  // TODO: defaults on nested switch statements do not run on outside cases
 
   switch (commandArray[0]) {
     case 'get': {
@@ -25,10 +31,12 @@ export async function interpretCommand(command: string): Promise<React.ReactNode
           return await optionCommands.getOptions();
         }
         default: {
-          <div>
-            <Warning message={`Unknown Command: ${trimmedCommand}`}></Warning>
-            {utilityCommands.help()}
-          </div>
+          return (
+            <div>
+              <Warning message={`Unknown Command: ${trimmedCommand}`}></Warning>
+              {utilityCommands.help()}
+            </div>
+          )
         }
       }
       break;
@@ -39,10 +47,12 @@ export async function interpretCommand(command: string): Promise<React.ReactNode
 
         }
         default: {
-          <div>
-            <Warning message={`Unknown Command: ${trimmedCommand}`}></Warning>
-            {utilityCommands.help()}
-          </div>
+          return (
+            <div>
+              <Warning message={`Unknown Command: ${trimmedCommand}`}></Warning>
+              {utilityCommands.help()}
+            </div>
+          )
         }
       }
       break;
@@ -68,6 +78,7 @@ export async function interpretCommand(command: string): Promise<React.ReactNode
       return utilityCommands.dog();
     }
     default: {
+      
       return (
         <div>
             <Warning message={`Unknown Command: ${trimmedCommand}`}></Warning>
